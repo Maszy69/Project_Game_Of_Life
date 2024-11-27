@@ -128,6 +128,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Project_Game_Of_Life.cpp" />
+    <ClCompile Include="Grille.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Grille.h" />
+    <ClInclude Include="Cellule.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
