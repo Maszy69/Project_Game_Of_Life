@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Project_Game_Of_Life.cpp" />
-    <ClCompile Include="Grille.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grille.h" />
