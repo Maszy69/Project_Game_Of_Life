@@ -1,73 +1,78 @@
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
-#include <filesystem> // ou <experimental/filesystem> selon le support
 #include <cstdlib>
+#include <thread>
+#include <chrono>
 #include <windows.h>
-#include <shlobj.h> // Pour SHGetFolderPath
+#include <shlobj.h>
+#include <locale>
+#include <codecvt>
+#include <ctime>
+#include <cstdio> // Pour std::remove
 #include "Grille.h"
 #include "Cellule.h"
+#include "Header.h"
+#include "Jeu.h"
+#include "Header_2.h"
 
-// Fonction pour obtenir le chemin du dossier Downloads
-std::string obtenirCheminDownloads() {
-    wchar_t cheminWide[MAX_PATH];
-    if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_PROFILE, NULL, 0, cheminWide))) {
-        std::wstring cheminUtilisateurWide(cheminWide);
-        std::string cheminUtilisateur(cheminUtilisateurWide.begin(), cheminUtilisateurWide.end());
-        return cheminUtilisateur + "\\Downloads\\";
+int main() {
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+    const std::string cheminFichier = obtenirCheminDownloads() + "etat_initial.txt";
+    const std::string cheminHistorique = obtenirCheminDownloads() + "jeu_out.txt";
+
+    int largeurGrille = 10, hauteurGrille = 10;
+
+    std::ifstream fichierTest(cheminFichier);
+    if (!fichierTest) {
+        std::ofstream fichier(cheminFichier);
+        fichier << "10 10" << std::endl;
+        std::cout << "Fichier cree avec des dimensions par defaut (10x10)." << std::endl;
     }
     else {
-        std::cerr << "Erreur : Impossible de localiser le dossier Téléchargements." << std::endl;
-        exit(1);
-    }
-}
-
-
-// Fonction principale
-int main() {
-    // Obtenir le chemin du dossier Téléchargements
-    std::string cheminDownloads = obtenirCheminDownloads();
-
-    // Chemin du fichier d'entrée et de sortie
-    std::string cheminFichierEntree = cheminDownloads + "etat_initial.txt";
-    std::string cheminFichierSortie = cheminDownloads + "jeu_out.txt";
-
-    // Ouvrir le fichier de sortie
-    std::ofstream fichierSortie(cheminFichierSortie);
-    if (!fichierSortie) {
-        std::cerr << "Erreur : Impossible de créer le fichier de sortie " << cheminFichierSortie << std::endl;
-        return 1;
+        fichierTest >> hauteurGrille >> largeurGrille;
     }
 
-    Grille grille(0, 0);
-    grille.initialiserDepuisFichier(cheminFichierEntree);
+    int choix = 0;
 
-    int maxIterations = 100;
-    Grille ancienneGrille = grille;
+    while (choix != 4) {
+        std::cout << "=== Menu ===" << std::endl;
+        std::cout << "1. Jouer" << std::endl;
+        std::cout << "2. Modifier la taille de la grille" << std::endl;
+        std::cout << "3. Afficher les iterations" << std::endl;
+        std::cout << "4. Quitter" << std::endl;
 
-    for (int iteration = 0; iteration < maxIterations; ++iteration) {
-        // Sauvegarder l'état dans le fichier
-        fichierSortie << "Iteration " << iteration << ":" << std::endl;
-        grille.sauvegarderEtat(fichierSortie);
+        do {
+            std::cout << "Veuillez entrer votre choix (1, 2, 3 ou 4) : ";
+            std::cin >> choix;
 
-        // Afficher l'état actuel dans la console
-        std::cout << "Iteration " << iteration << " : " << std::endl;
-        grille.afficher();
+            if (choix < 1 || choix > 4) {
+                std::cout << "Choix invalide. Veuillez entrer un choix valide." << std::endl;
+            }
+        } while (choix < 1 || choix > 4);
 
-        // Mettre à jour la grille
-        ancienneGrille = grille;
-        grille.mettreAJour();
-
-        // Vérifier si l'état est stable
-        if (grille.estStable(ancienneGrille)) {
-            std::cout << "Automate stable. Fin de l'exécution." << std::endl;
+        switch (choix) {
+        case 1: {
+            Jeu jeu(cheminFichier, 20, largeurGrille, hauteurGrille);
+            jeu.jouer();
+            break;
+        }
+        case 2:
+            modifierTailleGrille(cheminFichier, largeurGrille, hauteurGrille);
+            afficherInterfaceModifierGrille(cheminFichier, largeurGrille, hauteurGrille, 20);
+            break;
+        case 3:
+            afficherIterations(cheminHistorique);
+            break;
+        case 4:
+            std::cout << "Au revoir !" << std::endl;
             break;
         }
     }
 
-    fichierSortie.close();
-    std::cout << "Les résultats ont été enregistrés dans : " << cheminFichierSortie << std::endl;
-
     return 0;
 }
+
