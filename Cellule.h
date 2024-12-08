@@ -13,21 +13,25 @@
 #include <codecvt>
 #include <ctime>
 #include <cstdio> // Pour std::remove
-#include "Grille.h"
-#include "Cellule.h"
 
 // Classe représentant une cellule
 class Cellule {
 private:
-    bool vivante = false;
-    bool obstacle = false;
+    bool vivante = false; // Indique si la cellule est vivante
+    bool obstacle = false; // Indique si la cellule est un obstacle
 
 public:
+    // Définir l'état de la cellule (vivante ou morte)
     void definirEtat(bool etat) {
         if (!obstacle) vivante = etat;
     }
 
+    // Définir si la cellule est un obstacle
     void definirObstacle(bool estObstacle) { obstacle = estObstacle; }
+
+    // Vérifier si la cellule est vivante
     bool estVivante() const { return vivante; }
+
+    // Vérifier si la cellule est un obstacle
     bool estObstacle() const { return obstacle; }
 };
