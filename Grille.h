@@ -13,19 +13,20 @@
 #include <codecvt>
 #include <ctime>
 #include <cstdio> // Pour std::remove
-#include "Grille.h"
 #include "Cellule.h"
 
 // Classe représentant la grille
 class Grille {
 private:
-    int largeur;
-    int hauteur;
-    std::vector<std::vector<Cellule>> cellules;
+    int largeur; // Largeur de la grille
+    int hauteur; // Hauteur de la grille
+    std::vector<std::vector<Cellule>> cellules; // Matrice de cellules
 
 public:
+    // Constructeur de la classe Grille
     Grille(int largeur, int hauteur) : largeur(largeur), hauteur(hauteur), cellules(hauteur, std::vector<Cellule>(largeur)) {}
 
+    // Initialiser la grille à partir d'un fichier
     void initialiserDepuisFichier(const std::string& cheminFichier) {
         std::ifstream fichier(cheminFichier);
         if (!fichier) throw std::runtime_error("Erreur : Impossible d'ouvrir le fichier " + cheminFichier);
@@ -42,6 +43,7 @@ public:
         }
     }
 
+    // Afficher la grille dans une fenêtre SFML
     void afficher(sf::RenderWindow& fenetre, int tailleCellule) const {
         for (int y = 0; y < hauteur; ++y) {
             for (int x = 0; x < largeur; ++x) {
@@ -53,6 +55,7 @@ public:
         }
     }
 
+    // Définir l'état d'une cellule en fonction de la position de la souris
     void definirCelluleAvecSouris(int x, int y, int tailleCellule) {
         int cellX = x / tailleCellule;
         int cellY = y / tailleCellule;
@@ -61,6 +64,7 @@ public:
         }
     }
 
+    // Mettre à jour l'état de la grille
     void mettreAJour(std::ofstream& historique) {
         std::vector<std::vector<Cellule>> nouvelleGrille = cellules;
 
@@ -77,6 +81,7 @@ public:
         enregistrerHistorique(historique);
     }
 
+    // Enregistrer l'état actuel de la grille dans un fichier d'historique
     void enregistrerHistorique(std::ofstream& historique) const {
         historique << "Etat de la grille :\n";
         for (const auto& ligne : cellules) {
@@ -88,6 +93,7 @@ public:
         historique << "-----------------------------------\n";
     }
 
+    // Compter le nombre de voisins vivants autour d'une cellule
     int compterVoisinsVivants(int x, int y) const {
         int compteur = 0;
         for (int i = -1; i <= 1; ++i) {
@@ -101,32 +107,10 @@ public:
         return compteur;
     }
 
+    // Sauvegarder l'état actuel de la grille dans un fichier
     void sauvegarder(const std::string& cheminFichier) {
         std::ofstream fichier(cheminFichier);
         fichier << hauteur << " " << largeur << std::endl;
         for (const auto& ligne : cellules) {
             for (const auto& cellule : ligne) {
                 fichier << (cellule.estVivante() ? 1 : 0) << " ";
-            }
-            fichier << std::endl;
-        }
-    }
-
-    void placerMotifAleatoire(const std::vector<std::vector<int>>& motif) {
-        int xOffset = std::rand() % largeur;
-        int yOffset = std::rand() % hauteur;
-        placerMotif(motif, xOffset, yOffset);
-    }
-
-    void placerMotif(const std::vector<std::vector<int>>& motif, int xOffset, int yOffset) {
-        for (int y = 0; y < motif.size(); ++y) {
-            for (int x = 0; x < motif[y].size(); ++x) {
-                if (motif[y][x] == 1) {
-                    int xPos = (xOffset + x) % largeur;
-                    int yPos = (yOffset + y) % hauteur;
-                    cellules[yPos][xPos].definirEtat(true);
-                }
-            }
-        }
-    }
-};
