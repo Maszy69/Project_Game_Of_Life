@@ -12,12 +12,14 @@ Ce projet implémente le célèbre "Jeu de la Vie" de John Conway en utilisant l
 - Modification de la taille de la grille.
 - Affichage des itérations du jeu à partir d'un fichier d'historique.
 
-## Touches 
-
-- G : Glider
-- B : Block
-- Flèche haut/bas : Ajuster la vitesse du jeu
-- Barre d'espace : Mettre en pause
+## Liste des touches et actions
+•	Q : Quitter le jeu.
+•	Up (Flèche Haut) : Augmenter la vitesse du jeu.
+•	Down (Flèche Bas) : Diminuer la vitesse du jeu.
+•	G : Placer un motif "glider" aléatoire.
+•	B : Placer un motif "block" aléatoire.
+•	Space (Espace) : Mettre en pause ou reprendre le jeu.
+•	Bouton gauche de la souris : Changer l'état de la cellule cliquée (vivante ou morte).
 
 ## Prérequis
 
