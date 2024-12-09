@@ -12,6 +12,13 @@ Ce projet implémente le célèbre "Jeu de la Vie" de John Conway en utilisant l
 - Modification de la taille de la grille.
 - Affichage des itérations du jeu à partir d'un fichier d'historique.
 
+## Touches 
+
+G : Glider
+B : Block
+Flèche haut/bas : Ajuster la vitesse du jeu
+Barre d'espace : Mettre en pause
+
 ## Prérequis
 
 - [SFML](https://www.sfml-dev.org/download.php) (Simple and Fast Multimedia Library)
