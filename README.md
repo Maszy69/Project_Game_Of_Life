@@ -14,10 +14,10 @@ Ce projet implémente le célèbre "Jeu de la Vie" de John Conway en utilisant l
 
 ## Touches 
 
-G : Glider
-B : Block
-Flèche haut/bas : Ajuster la vitesse du jeu
-Barre d'espace : Mettre en pause
+- G : Glider
+- B : Block
+- Flèche haut/bas : Ajuster la vitesse du jeu
+- Barre d'espace : Mettre en pause
 
 ## Prérequis
 
